@@ -5,3 +5,4 @@ duckduckgo-search
 ddgs
 pydantic<3
 numexpr
+Pillow

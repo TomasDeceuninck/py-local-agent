@@ -1,6 +1,9 @@
 # tools.py
 
 import os
+import base64
+from PIL import Image # type: ignore
+from io import BytesIO
 from langchain_core.tools import tool
 import numexpr
 
@@ -42,3 +45,36 @@ def calculator(expression: str) -> str:
         return result
     except Exception as e:
         return f"Error evaluating expression '{expression}': {e}"
+
+@tool
+def describe_image(image_path: str, prompt: str = "Describe this image.") -> str:
+    """
+    Analyzes an image file and provides a description or answers a question about it.
+    Useful for understanding the content of local images.
+    Input must be a valid image file path relative to the project root.
+    The 'prompt' argument can be used to ask a specific question about the image.
+    """
+    abs_image_path = os.path.abspath(os.path.join(PROJECT_ROOT, image_path))
+
+    # Security check: Ensure the file is within the project root
+    if not os.path.commonpath([PROJECT_ROOT, abs_image_path]) == PROJECT_ROOT:
+        return f"Error: Access denied. Cannot process image outside project directory: {image_path}"
+
+    try:
+        # Load image and convert to base64
+        with Image.open(abs_image_path) as img:
+            buffered = BytesIO()
+            # Save as JPEG for consistent base64 encoding for multimodal models
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+            img.save(buffered, format="JPEG")
+            base64_image = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+        # The actual vision model invocation will happen in agent.py
+        # This tool just prepares the data and signals its use
+        return f"Image '{image_path}' ready for vision model with prompt: '{prompt}'. " \
+               f"Please refer to the vision model's output for analysis."
+    except FileNotFoundError:
+        return f"Error: Image file not found at {image_path}"
+    except Exception as e:
+        return f"Error processing image {image_path}: {e}"
