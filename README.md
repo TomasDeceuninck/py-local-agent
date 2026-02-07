@@ -34,8 +34,24 @@ pip install -r requirements.txt
 
 ### 4. Run the Agent
 
-Start the agent:
+The easiest way to run the agent is by using the provided startup scripts.
 
+*   **On Windows:**
+    ```bash
+    run.bat
+    ```
+
+*   **On Linux/macOS:**
+    First, make the script executable:
+    ```bash
+    chmod +x run.sh
+    ```
+    Then run it:
+    ```bash
+    ./run.sh
+    ```
+
+Alternatively, you can manually activate the virtual environment and run the Python script directly:
 ```bash
 python main.py
 ```
