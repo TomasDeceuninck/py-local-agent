@@ -4,4 +4,4 @@
 OLLAMA_MODEL = "qwen3:4b"
 
 # The Ollama model to use for vision tasks
-OLLAMA_VISION_MODEL = "llama3.2-vision"
+OLLAMA_VISION_MODEL = "llava"

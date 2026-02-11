@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Add two numbers",
+    "user_input": "What is 10 + 5?",
+    "expected_response_contains": "15",
+    "expected_tool_calls": [
+      {"name": "calculator", "args": {"expression": "10 + 5"}}
+    ]
+  },
+  {
+    "name": "Subtract two numbers",
+    "user_input": "Calculate 20 - 7",
+    "expected_response_contains": "13",
+    "expected_tool_calls": [
+      {"name": "calculator", "args": {"expression": "20 - 7"}}
+    ]
+  },
+  {
+    "name": "Multiply two numbers",
+    "user_input": "Multiply 8 by 6",
+    "expected_response_contains": "48",
+    "expected_tool_calls": [
+      {"name": "calculator", "args": {"expression": "8 * 6"}}
+    ]
+  },
+  {
+    "name": "Divide two numbers",
+    "user_input": "Divide 100 by 4",
+    "expected_response_contains": "25",
+    "expected_tool_calls": [
+      {"name": "calculator", "args": {"expression": "100 / 4"}}
+    ]
+  },
+  {
+    "name": "Complex expression",
+    "user_input": "Solve (5 + 3) * 2 - 1",
+    "expected_response_contains": "15",
+    "expected_tool_calls": [
+      {"name": "calculator", "args": {"expression": "(5 + 3) * 2 - 1"}}
+    ]
+  }
+]

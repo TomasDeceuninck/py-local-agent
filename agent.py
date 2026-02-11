@@ -50,7 +50,7 @@ class Agent:
         ]
         print("Ollama Agent is ready.")
 
-    def process_message(self, user_input: str) -> str:
+    def process_message(self, user_input: str) -> tuple[str, list]:
         """
         Processes a user's message, runs the agent loop, and returns the final response.
         """
@@ -60,12 +60,17 @@ class Agent:
         ai_response = self.llm_with_tools.invoke(self.chat_history)
         self.chat_history.append(ai_response)
 
+        actual_tool_calls = [] # Initialize a list to store executed tool calls
+
         # If the model called a tool, handle it
         if ai_response.tool_calls:
             print(f"{COLOR_DIM}Agent wants to use a tool...{COLOR_RESET}")
             tool_outputs = []
             for tool_call in ai_response.tool_calls:
                 print(f"{COLOR_DIM}-> Calling tool '{tool_call['name']}' with args {tool_call['args']}{COLOR_RESET}")
+                
+                # Capture the tool call *before* execution for comparison
+                actual_tool_calls.append({"name": tool_call['name'], "args": tool_call['args']})
                 
                 if tool_call['name'] == 'duckduckgo_search':
                     tool_output = self.search_tool.invoke(tool_call["args"])
@@ -106,7 +111,7 @@ class Agent:
             print(f"{COLOR_DIM}...sending tool results back to Agent to get a final answer.{COLOR_RESET}")
             final_response = self.llm_with_tools.invoke(self.chat_history)
             self.chat_history.append(final_response)
-            return final_response.content
+            return final_response.content, actual_tool_calls # Modified return
         
-        # If no tool was called, return the AI's direct response
-        return ai_response.content
+        # If no tool was called, return the AI's direct response and an empty list of tool calls
+        return ai_response.content, actual_tool_calls

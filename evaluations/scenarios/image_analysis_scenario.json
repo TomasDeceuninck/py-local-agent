@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Describe Image 1",
+    "user_input": "Describe the image located at 'evaluations/images/image-1.png'",
+    "expected_response_contains": "description for image 1",
+    "expected_tool_calls": [
+      {"name": "analyze_image", "args": {"image_path": "evaluations/images/image-1.png", "model_name": "llava"}}
+    ]
+  },
+  {
+    "name": "Describe Image 2",
+    "user_input": "Describe the image located at 'evaluations/images/image-2.png'",
+    "expected_response_contains": "description for image 2",
+    "expected_tool_calls": [
+      {"name": "analyze_image", "args": {"image_path": "evaluations/images/image-2.png", "model_name": "llava"}}
+    ]
+  },
+  {
+    "name": "Describe Invalid Image Path",
+    "user_input": "Describe the image located at 'non_existent_image.png'",
+    "expected_response_contains": "Image file not found",
+    "expected_tool_calls": [
+      {"name": "analyze_image", "args": {"image_path": "non_existent_image.png", "model_name": "llava"}}
+    ]
+  }
+]

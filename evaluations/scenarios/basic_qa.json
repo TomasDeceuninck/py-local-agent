@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Simple Greeting",
+    "user_input": "Hello, agent!",
+    "expected_response_contains": "Hello",
+    "expected_tool_calls": []
+  },
+  {
+    "name": "General Question - No Tools",
+    "user_input": "What is the capital of France?",
+    "expected_response_contains": "Paris",
+    "expected_tool_calls": [
+      {"name": "duckduckgo_search", "args": {"query": "capital of France"}}
+    ]
+  },
+  {
+    "name": "Inquire Capabilities",
+    "user_input": "What can you do?",
+    "expected_response_contains": "I can help with tasks like",
+    "expected_tool_calls": []
+  }
+]

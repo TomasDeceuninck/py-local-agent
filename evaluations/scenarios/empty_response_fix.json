@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Analyze Image - Check for Non-Empty Response",
+    "user_input": "Describe the image: evaluations/images/image-1.png",
+    "expected_response_contains": "description for image 1",
+    "expected_tool_calls": [
+      {"name": "analyze_image", "args": {"image_path": "evaluations/images/image-1.png", "model_name": "llava"}}
+    ]
+  }
+]
