@@ -7,7 +7,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, SystemMessage
 
 from config import OLLAMA_MODEL, OLLAMA_VISION_MODEL
-from tools import read_file, calculator, analyze_image 
+from tools import read_file, calculator, analyze_image, speak # Added speak tool
 
 # Define ANSI escape codes for colors (DIM and RESET only for internal prints)
 COLOR_DIM = "\033[2m"
@@ -25,8 +25,9 @@ class Agent:
         self.search_tool = DuckDuckGoSearchRun()
         self.read_file_tool = read_file
         self.calculator_tool = calculator
-        self.analyze_image_tool = analyze_image 
-        self.tools = [self.search_tool, self.read_file_tool, self.calculator_tool, self.analyze_image_tool] 
+        self.analyze_image_tool = analyze_image
+        self.speak_tool = speak # Added speak tool
+        self.tools = [self.search_tool, self.read_file_tool, self.calculator_tool, self.analyze_image_tool, self.speak_tool] # Added speak tool
 
         # Bind the tools to the LLM
         self.llm_with_tools = self.llm.bind_tools(self.tools)
@@ -41,6 +42,8 @@ class Agent:
                         "The 'analyze_image' tool takes an 'image_path' and an optional 'prompt' and 'model_name'. "
                         "By default, the 'analyze_image' tool uses 'llama3.2-vision' as the model. "
                         "Always use the provided image path directly for analysis. "
+                        "When you are asked to speak something out loud, you MUST use the 'speak' tool. "
+                        "The 'speak' tool takes a 'text' argument, which is the exact text to be spoken. "
                         "Process the tool's output and provide a concise, natural language summary or answer to the user. "
                         "Do not respond with tool calls directly. If a tool is relevant, you MUST use it."
             )
@@ -84,6 +87,11 @@ class Agent:
                     tool_args = tool_call["args"]
                     tool_args["model_name"] = OLLAMA_VISION_MODEL
                     tool_output = self.analyze_image_tool.invoke(tool_args)
+                    tool_outputs.append(
+                        ToolMessage(content=str(tool_output), tool_call_id=tool_call["id"])
+                    )
+                elif tool_call['name'] == 'speak':
+                    tool_output = self.speak_tool.invoke(tool_call["args"])
                     tool_outputs.append(
                         ToolMessage(content=str(tool_output), tool_call_id=tool_call["id"])
                     )

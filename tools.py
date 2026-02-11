@@ -2,6 +2,7 @@
 
 import os
 import base64
+import pyttsx3 # Added for TTS
 from langchain_ollama import ChatOllama
 from langchain_core.messages import HumanMessage
 from langchain_core.tools import tool
@@ -95,3 +96,22 @@ def analyze_image(image_path: str, prompt: str = "What is in this image? Provide
         return f"Error: {e}"
     except Exception as e:
         return f"Error analyzing image {image_path}: {e}"
+
+@tool
+def speak(text: str) -> str:
+    """
+    Converts the given text to speech and plays it aloud.
+    Useful for having the agent communicate verbally.
+    """
+    try:
+        engine = pyttsx3.init()
+        # You can set properties like rate, volume, and voice here if needed
+        # For example:
+        # engine.setProperty('rate', 150)
+        # voices = engine.getProperty('voices')
+        # engine.setProperty('voice', voices[0].id) # Use the first available voice
+        engine.say(text)
+        engine.runAndWait()
+        return f"Successfully spoke: '{text}'"
+    except Exception as e:
+        return f"Error speaking text: {e}"

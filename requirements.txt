@@ -6,3 +6,4 @@ ddgs
 pydantic<3
 numexpr
 Pillow
+pyttsx3
